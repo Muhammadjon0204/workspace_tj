@@ -1,0 +1,141 @@
+2026-03-17 11:42:10.269 +03:00 [INF] Now listening on: http://localhost:5264
+2026-03-17 11:42:10.331 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-17 11:42:10.333 +03:00 [INF] Hosting environment: Development
+2026-03-17 11:42:10.335 +03:00 [INF] Content root path: C:\Users\user\Desktop\C_SHARP\workspace.tj\WebApi
+2026-03-17 11:42:19.739 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/ - null null
+2026-03-17 11:42:19.801 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-03-17 11:42:19.814 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/ - 404 0 null 79.6963ms
+2026-03-17 11:42:19.863 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5264/, Response status code: 404
+2026-03-17 11:42:26.232 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger - null null
+2026-03-17 11:42:26.464 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger - 301 0 null 231.305ms
+2026-03-17 11:42:26.511 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/index.html - null null
+2026-03-17 11:42:26.724 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/index.html - 200 null text/html;charset=utf-8 213.3108ms
+2026-03-17 11:42:26.762 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/swagger-ui.css - null null
+2026-03-17 11:42:26.764 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/index.css - null null
+2026-03-17 11:42:26.768 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/swagger-ui-bundle.js - null null
+2026-03-17 11:42:26.774 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/swagger-ui-standalone-preset.js - null null
+2026-03-17 11:42:26.774 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/index.js - null null
+2026-03-17 11:42:26.814 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/swagger-ui.css - 200 23647 text/css 51.8508ms
+2026-03-17 11:42:26.846 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/index.css - 200 152 text/css 81.8058ms
+2026-03-17 11:42:26.913 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/swagger-ui-bundle.js - 200 424767 text/javascript 144.2914ms
+2026-03-17 11:42:26.933 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/swagger-ui-standalone-preset.js - 200 77352 text/javascript 158.9633ms
+2026-03-17 11:42:27.015 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/index.js - 200 null application/javascript;charset=utf-8 240.4912ms
+2026-03-17 11:42:27.498 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - null null
+2026-03-17 11:42:27.549 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/favicon-32x32.png - null null
+2026-03-17 11:42:27.708 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/favicon-32x32.png - 200 628 image/png 158.7429ms
+2026-03-17 11:42:27.806 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 307.737ms
+2026-03-17 11:42:39.414 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/companies - null null
+2026-03-17 11:42:39.423 +03:00 [INF] Executing endpoint 'WebApi.Controllers.CompanyController.GetAll (WebApi)'
+2026-03-17 11:42:39.456 +03:00 [INF] Route matched with {action = "GetAll", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Company]]] GetAll() on controller WebApi.Controllers.CompanyController (WebApi).
+2026-03-17 11:42:40.427 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Company, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:42:40.478 +03:00 [INF] Executed action WebApi.Controllers.CompanyController.GetAll (WebApi) in 1014.0542ms
+2026-03-17 11:42:40.484 +03:00 [INF] Executed endpoint 'WebApi.Controllers.CompanyController.GetAll (WebApi)'
+2026-03-17 11:42:40.486 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/companies - 200 null application/json; charset=utf-8 1071.7486ms
+2026-03-17 11:43:30.667 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5264/api/companies - application/json 129
+2026-03-17 11:43:30.677 +03:00 [INF] Executing endpoint 'WebApi.Controllers.CompanyController.Create (WebApi)'
+2026-03-17 11:43:30.694 +03:00 [INF] Route matched with {action = "Create", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Int32]] Create(Domain.Entities.Company) on controller WebApi.Controllers.CompanyController (WebApi).
+2026-03-17 11:43:30.787 +03:00 [INF] Создана компания: Alif Academy, id 4
+2026-03-17 11:43:30.791 +03:00 [INF] Executing CreatedAtActionResult, writing value of type 'System.Int32'.
+2026-03-17 11:43:30.815 +03:00 [INF] Executed action WebApi.Controllers.CompanyController.Create (WebApi) in 114.5203ms
+2026-03-17 11:43:30.819 +03:00 [INF] Executed endpoint 'WebApi.Controllers.CompanyController.Create (WebApi)'
+2026-03-17 11:43:30.823 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5264/api/companies - 201 null application/json; charset=utf-8 156.3889ms
+2026-03-17 11:43:51.848 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/companies/4 - null null
+2026-03-17 11:43:51.853 +03:00 [INF] Executing endpoint 'WebApi.Controllers.CompanyController.GetById (WebApi)'
+2026-03-17 11:43:51.861 +03:00 [INF] Route matched with {action = "GetById", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Domain.Entities.Company]] GetById(Int32) on controller WebApi.Controllers.CompanyController (WebApi).
+2026-03-17 11:43:51.885 +03:00 [INF] Executing OkObjectResult, writing value of type 'Domain.Entities.Company'.
+2026-03-17 11:43:51.889 +03:00 [INF] Executed action WebApi.Controllers.CompanyController.GetById (WebApi) in 24.2561ms
+2026-03-17 11:43:51.892 +03:00 [INF] Executed endpoint 'WebApi.Controllers.CompanyController.GetById (WebApi)'
+2026-03-17 11:43:51.895 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/companies/4 - 200 null application/json; charset=utf-8 46.9584ms
+2026-03-17 11:44:07.627 +03:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5264/api/companies/5 - null null
+2026-03-17 11:44:07.632 +03:00 [INF] Executing endpoint 'WebApi.Controllers.CompanyController.Delete (WebApi)'
+2026-03-17 11:44:07.659 +03:00 [INF] Route matched with {action = "Delete", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Delete(Int32) on controller WebApi.Controllers.CompanyController (WebApi).
+2026-03-17 11:44:07.682 +03:00 [WRN] Компания с id 5 не найдена для удаления
+2026-03-17 11:44:07.688 +03:00 [INF] Executing NotFoundObjectResult, writing value of type 'System.String'.
+2026-03-17 11:44:07.692 +03:00 [INF] Executed action WebApi.Controllers.CompanyController.Delete (WebApi) in 27.6593ms
+2026-03-17 11:44:07.696 +03:00 [INF] Executed endpoint 'WebApi.Controllers.CompanyController.Delete (WebApi)'
+2026-03-17 11:44:07.698 +03:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5264/api/companies/5 - 404 null text/plain; charset=utf-8 70.4555ms
+2026-03-17 11:44:15.703 +03:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5264/api/companies/4 - null null
+2026-03-17 11:44:15.708 +03:00 [INF] Executing endpoint 'WebApi.Controllers.CompanyController.Delete (WebApi)'
+2026-03-17 11:44:15.720 +03:00 [INF] Route matched with {action = "Delete", controller = "Company"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Delete(Int32) on controller WebApi.Controllers.CompanyController (WebApi).
+2026-03-17 11:44:15.749 +03:00 [INF] Удалена компания с id 4
+2026-03-17 11:44:15.757 +03:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2026-03-17 11:44:15.762 +03:00 [INF] Executed action WebApi.Controllers.CompanyController.Delete (WebApi) in 30.3072ms
+2026-03-17 11:44:15.766 +03:00 [INF] Executed endpoint 'WebApi.Controllers.CompanyController.Delete (WebApi)'
+2026-03-17 11:44:15.769 +03:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5264/api/companies/4 - 204 null null 65.518ms
+2026-03-17 11:44:52.836 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/workspaces - null null
+2026-03-17 11:44:52.841 +03:00 [INF] Executing endpoint 'WebApi.Controllers.WorkspaceController.GetAll (WebApi)'
+2026-03-17 11:44:52.851 +03:00 [INF] Route matched with {action = "GetAll", controller = "Workspace"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Workspace]]] GetAll() on controller WebApi.Controllers.WorkspaceController (WebApi).
+2026-03-17 11:44:52.868 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Workspace, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:44:52.874 +03:00 [INF] Executed action WebApi.Controllers.WorkspaceController.GetAll (WebApi) in 16.4996ms
+2026-03-17 11:44:52.876 +03:00 [INF] Executed endpoint 'WebApi.Controllers.WorkspaceController.GetAll (WebApi)'
+2026-03-17 11:44:52.881 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/workspaces - 200 null application/json; charset=utf-8 44.5857ms
+2026-03-17 11:45:13.708 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/workspaces/room/2 - null null
+2026-03-17 11:45:13.715 +03:00 [INF] Executing endpoint 'WebApi.Controllers.WorkspaceController.GetByRoom (WebApi)'
+2026-03-17 11:45:13.725 +03:00 [INF] Route matched with {action = "GetByRoom", controller = "Workspace"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Workspace]]] GetByRoom(Int32) on controller WebApi.Controllers.WorkspaceController (WebApi).
+2026-03-17 11:45:13.741 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Workspace, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:45:13.748 +03:00 [INF] Executed action WebApi.Controllers.WorkspaceController.GetByRoom (WebApi) in 17.141ms
+2026-03-17 11:45:13.751 +03:00 [INF] Executed endpoint 'WebApi.Controllers.WorkspaceController.GetByRoom (WebApi)'
+2026-03-17 11:45:13.754 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/workspaces/room/2 - 200 null application/json; charset=utf-8 45.8083ms
+2026-03-17 11:46:43.859 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/workspaces/room/1 - null null
+2026-03-17 11:46:43.865 +03:00 [INF] Executing endpoint 'WebApi.Controllers.WorkspaceController.GetByRoom (WebApi)'
+2026-03-17 11:46:43.868 +03:00 [INF] Route matched with {action = "GetByRoom", controller = "Workspace"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Workspace]]] GetByRoom(Int32) on controller WebApi.Controllers.WorkspaceController (WebApi).
+2026-03-17 11:46:43.875 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Workspace, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:46:43.961 +03:00 [INF] Executed action WebApi.Controllers.WorkspaceController.GetByRoom (WebApi) in 89.3039ms
+2026-03-17 11:46:43.964 +03:00 [INF] Executed endpoint 'WebApi.Controllers.WorkspaceController.GetByRoom (WebApi)'
+2026-03-17 11:46:43.967 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/workspaces/room/1 - 200 null application/json; charset=utf-8 108.1382ms
+2026-03-17 11:47:42.290 +03:00 [INF] Application is shutting down...
+2026-03-17 11:47:49.038 +03:00 [INF] Now listening on: http://localhost:5264
+2026-03-17 11:47:49.089 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-17 11:47:49.092 +03:00 [INF] Hosting environment: Development
+2026-03-17 11:47:49.093 +03:00 [INF] Content root path: C:\Users\user\Desktop\C_SHARP\workspace.tj\WebApi
+2026-03-17 11:47:52.798 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/index.html - null null
+2026-03-17 11:47:52.978 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/index.html - 200 null text/html;charset=utf-8 183.0442ms
+2026-03-17 11:47:53.299 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - null null
+2026-03-17 11:47:53.480 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 182.8654ms
+2026-03-17 11:48:06.577 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/workspaces/room/1 - null null
+2026-03-17 11:48:06.595 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-03-17 11:48:06.600 +03:00 [INF] Executing endpoint 'WebApi.Controllers.WorkspaceController.GetByRoom (WebApi)'
+2026-03-17 11:48:06.629 +03:00 [INF] Route matched with {action = "GetByRoom", controller = "Workspace"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Workspace]]] GetByRoom(Int32) on controller WebApi.Controllers.WorkspaceController (WebApi).
+2026-03-17 11:48:06.998 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Workspace, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:48:07.044 +03:00 [INF] Executed action WebApi.Controllers.WorkspaceController.GetByRoom (WebApi) in 405.268ms
+2026-03-17 11:48:07.046 +03:00 [INF] Executed endpoint 'WebApi.Controllers.WorkspaceController.GetByRoom (WebApi)'
+2026-03-17 11:48:07.048 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/workspaces/room/1 - 200 null application/json; charset=utf-8 470.1679ms
+2026-03-17 11:48:22.347 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/bookings/company/2 - null null
+2026-03-17 11:48:22.357 +03:00 [INF] Executing endpoint 'WebApi.Controllers.BookingController.GetCompanyBookings (WebApi)'
+2026-03-17 11:48:22.363 +03:00 [INF] Route matched with {action = "GetCompanyBookings", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Booking]]] GetCompanyBookings(Int32) on controller WebApi.Controllers.BookingController (WebApi).
+2026-03-17 11:48:22.392 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Booking, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:48:22.413 +03:00 [INF] Executed action WebApi.Controllers.BookingController.GetCompanyBookings (WebApi) in 45.8133ms
+2026-03-17 11:48:22.418 +03:00 [INF] Executed endpoint 'WebApi.Controllers.BookingController.GetCompanyBookings (WebApi)'
+2026-03-17 11:48:22.424 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/bookings/company/2 - 200 null application/json; charset=utf-8 76.8816ms
+2026-03-17 11:49:49.428 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/bookings/daily?date=2024-02-25 - null null
+2026-03-17 11:49:49.442 +03:00 [INF] Executing endpoint 'WebApi.Controllers.BookingController.GetByDate (WebApi)'
+2026-03-17 11:49:49.453 +03:00 [INF] Route matched with {action = "GetByDate", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Booking]]] GetByDate(System.DateTime) on controller WebApi.Controllers.BookingController (WebApi).
+2026-03-17 11:49:49.476 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Booking, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:49:49.480 +03:00 [INF] Executed action WebApi.Controllers.BookingController.GetByDate (WebApi) in 20.2538ms
+2026-03-17 11:49:49.483 +03:00 [INF] Executed endpoint 'WebApi.Controllers.BookingController.GetByDate (WebApi)'
+2026-03-17 11:49:49.486 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/bookings/daily?date=2024-02-25 - 200 null application/json; charset=utf-8 57.4168ms
+2026-03-17 11:50:03.352 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/bookings/statistics - null null
+2026-03-17 11:50:03.358 +03:00 [INF] Executing endpoint 'WebApi.Controllers.BookingController.GetStatistics (WebApi)'
+2026-03-17 11:50:03.367 +03:00 [INF] Route matched with {action = "GetStatistics", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Domain.DTOs.BookingStatistics]] GetStatistics() on controller WebApi.Controllers.BookingController (WebApi).
+2026-03-17 11:50:03.393 +03:00 [INF] Получена статистика бронирований
+2026-03-17 11:50:03.396 +03:00 [INF] Executing OkObjectResult, writing value of type 'Domain.DTOs.BookingStatistics'.
+2026-03-17 11:50:03.403 +03:00 [INF] Executed action WebApi.Controllers.BookingController.GetStatistics (WebApi) in 30.4161ms
+2026-03-17 11:50:03.405 +03:00 [INF] Executed endpoint 'WebApi.Controllers.BookingController.GetStatistics (WebApi)'
+2026-03-17 11:50:03.406 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/bookings/statistics - 200 null application/json; charset=utf-8 54.3523ms
+2026-03-17 11:50:20.448 +03:00 [INF] Application is shutting down...
+2026-03-17 11:50:26.009 +03:00 [INF] Now listening on: http://localhost:5264
+2026-03-17 11:50:26.080 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-17 11:50:26.082 +03:00 [INF] Hosting environment: Development
+2026-03-17 11:50:26.083 +03:00 [INF] Content root path: C:\Users\user\Desktop\C_SHARP\workspace.tj\WebApi
+2026-03-17 11:50:29.345 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/index.html - null null
+2026-03-17 11:50:29.497 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/index.html - 200 null text/html;charset=utf-8 154.2214ms
+2026-03-17 11:50:29.646 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - null null
+2026-03-17 11:50:29.814 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 175.1491ms
+2026-03-17 11:50:36.393 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/api/bookings/company/1 - null null
+2026-03-17 11:50:36.409 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-03-17 11:50:36.414 +03:00 [INF] Executing endpoint 'WebApi.Controllers.BookingController.GetCompanyBookings (WebApi)'
+2026-03-17 11:50:36.446 +03:00 [INF] Route matched with {action = "GetCompanyBookings", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Domain.Entities.Booking]]] GetCompanyBookings(Int32) on controller WebApi.Controllers.BookingController (WebApi).
+2026-03-17 11:50:36.825 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Domain.Entities.Booking, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-17 11:50:36.882 +03:00 [INF] Executed action WebApi.Controllers.BookingController.GetCompanyBookings (WebApi) in 429.1028ms
+2026-03-17 11:50:36.888 +03:00 [INF] Executed endpoint 'WebApi.Controllers.BookingController.GetCompanyBookings (WebApi)'
+2026-03-17 11:50:36.892 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/bookings/company/1 - 200 null application/json; charset=utf-8 498.8628ms
