@@ -1,29 +1,21 @@
-using Dapper;
 using Domain.Entities;
 using Infrastructure.Context;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Service;
 
-public class WorkspaceService : IWorkspaceService
+public class WorkspaceService(DBContext _db, ILogger<WorkspaceService> _logger) : IWorkspaceService
 {
-    private readonly DataContext _context;
-    private readonly ILogger<WorkspaceService> _logger;
-
-    public WorkspaceService(DataContext context, ILogger<WorkspaceService> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
-
     public async Task<IEnumerable<Workspace>> GetAllAsync()
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM workspaces ORDER BY id";
-            return await connection.QueryAsync<Workspace>(sql);
+            return await _db.Workspaces
+                .AsNoTracking()
+                .OrderBy(w => w.Id)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -36,9 +28,9 @@ public class WorkspaceService : IWorkspaceService
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM workspaces WHERE id = @Id";
-            var workspace = await connection.QueryFirstOrDefaultAsync<Workspace>(sql, new { Id = id });
+            var workspace = await _db.Workspaces
+                .AsNoTracking()
+                .FirstOrDefaultAsync(w => w.Id == id);
 
             if (workspace == null)
                 _logger.LogWarning("Рабочее место с id {Id} не найдено", id);
@@ -56,9 +48,17 @@ public class WorkspaceService : IWorkspaceService
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT Id , room_id as RoomId , name , type , created_at as CreatedAt FROM workspaces WHERE room_id = @RoomId";
-            return await connection.QueryAsync<Workspace>(sql, new { RoomId = roomId });
+            var roomExists = await _db.Rooms.AnyAsync(r => r.Id == roomId);
+            if (!roomExists)
+            {
+                _logger.LogWarning("Комната с id {RoomId} не найдена", roomId);
+                return new List<Workspace>();
+            }
+
+            return await _db.Workspaces
+                .AsNoTracking()
+                .Where(w => w.RoomId == roomId)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -77,23 +77,25 @@ public class WorkspaceService : IWorkspaceService
             if (string.IsNullOrWhiteSpace(workspace.Type))
                 throw new ArgumentException("Тип рабочего места обязателен");
 
-            if (workspace.RoomId <= 0)
+            if (workspace.RoomId < 1)
                 throw new ArgumentException("Необходимо указать комнату");
 
-            using var connection = _context.CreateConnection();
-            var sql = """
-                INSERT INTO workspaces (room_id, name, type, created_at)
-                VALUES (@RoomId, @Name, @Type, @CreatedAt)
-                RETURNING id
-                """;
+            var roomExists = await _db.Rooms.AnyAsync(r => r.Id == workspace.RoomId);
+            if (!roomExists)
+            {
+                _logger.LogWarning("Комната с id {RoomId} не найдена", workspace.RoomId);
+                throw new ArgumentException($"Комната с id {workspace.RoomId} не найдена");
+            }
 
             workspace.CreatedAt = DateTime.UtcNow;
-            var id = await connection.ExecuteScalarAsync<int>(sql, workspace);
+
+            await _db.Workspaces.AddAsync(workspace);
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Создано рабочее место: {Name}, id {Id}, комната {RoomId}",
-                workspace.Name, id, workspace.RoomId);
+                workspace.Name, workspace.Id, workspace.RoomId);
 
-            return id;
+            return workspace.Id;
         }
         catch (Exception ex)
         {
@@ -112,26 +114,18 @@ public class WorkspaceService : IWorkspaceService
             if (string.IsNullOrWhiteSpace(workspace.Type))
                 throw new ArgumentException("Тип рабочего места обязателен");
 
-            using var connection = _context.CreateConnection();
-            var sql = """
-                UPDATE workspaces
-                SET room_id = @RoomId, name = @Name, type = @Type
-                WHERE id = @Id
-                """;
-
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                workspace.RoomId,
-                workspace.Name,
-                workspace.Type,
-                Id = id
-            });
-
-            if (rows == 0)
+            var existing = await _db.Workspaces.FindAsync(id);
+            if (existing == null)
             {
                 _logger.LogWarning("Рабочее место с id {Id} не найдено для обновления", id);
                 return false;
             }
+
+            existing.RoomId = workspace.RoomId;
+            existing.Name = workspace.Name;
+            existing.Type = workspace.Type;
+
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Обновлено рабочее место с id {Id}", id);
             return true;
@@ -147,15 +141,15 @@ public class WorkspaceService : IWorkspaceService
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "DELETE FROM workspaces WHERE id = @Id";
-            var rows = await connection.ExecuteAsync(sql, new { Id = id });
-
-            if (rows == 0)
+            var workspace = await _db.Workspaces.FindAsync(id);
+            if (workspace == null)
             {
                 _logger.LogWarning("Рабочее место с id {Id} не найдено для удаления", id);
                 return false;
             }
+
+            _db.Workspaces.Remove(workspace);
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Удалено рабочее место с id {Id}", id);
             return true;

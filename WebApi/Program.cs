@@ -1,6 +1,8 @@
 using Infrastructure.Context;
 using Infrastructure.Interfaces;
 using Infrastructure.Service;
+using Microsoft.EntityFrameworkCore;
+using EFCore.NamingConventions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,12 +13,16 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
-
+builder.Services.AddDbContext<DBContext>(options =>
+    options
+        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .UseSnakeCaseNamingConvention()); 
+        
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<DataContext>();
+builder.Services.AddScoped<DataContext>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();

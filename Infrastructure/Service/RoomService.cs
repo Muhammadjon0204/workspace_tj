@@ -1,20 +1,21 @@
-using Dapper;
 using Domain.Entities;
 using Infrastructure.Context;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Service;
 
-public class RoomService(DataContext _context, ILogger<RoomService> _logger) : IRoomService
+public class RoomService(DBContext _db, ILogger<RoomService> _logger) : IRoomService
 {
     public async Task<IEnumerable<Room>> GetAllAsync()
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM rooms ORDER BY id";
-            return await connection.QueryAsync<Room>(sql);
+            return await _db.Rooms
+                .AsNoTracking()
+                .OrderBy(r => r.Id)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -27,9 +28,9 @@ public class RoomService(DataContext _context, ILogger<RoomService> _logger) : I
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM rooms WHERE id = @Id";
-            var room = await connection.QueryFirstOrDefaultAsync<Room>(sql, new { Id = id });
+            var room = await _db.Rooms
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             if (room == null)
                 _logger.LogWarning("Комната с id {Id} не найдена", id);
@@ -56,18 +57,13 @@ public class RoomService(DataContext _context, ILogger<RoomService> _logger) : I
             if (room.PricePerHour <= 0)
                 throw new ArgumentException("Цена за час должна быть больше нуля");
 
-            using var connection = _context.CreateConnection();
-            var sql = """
-                INSERT INTO rooms (name, capacity, price_per_hour, created_at)
-                VALUES (@Name, @Capacity, @PricePerHour, @CreatedAt)
-                RETURNING id
-                """;
-
             room.CreatedAt = DateTime.UtcNow;
-            var id = await connection.ExecuteScalarAsync<int>(sql, room);
 
-            _logger.LogInformation("Создана комната: {Name}, id {Id}", room.Name, id);
-            return id;
+            await _db.Rooms.AddAsync(room);
+            await _db.SaveChangesAsync();
+
+            _logger.LogInformation("Создана комната: {Name}, id {Id}", room.Name, room.Id);
+            return room.Id;
         }
         catch (Exception ex)
         {
@@ -86,26 +82,18 @@ public class RoomService(DataContext _context, ILogger<RoomService> _logger) : I
             if (room.Capacity <= 0)
                 throw new ArgumentException("Вместимость должна быть больше нуля");
 
-            using var connection = _context.CreateConnection();
-            var sql = """
-                UPDATE rooms
-                SET name = @Name, capacity = @Capacity, price_per_hour = @PricePerHour
-                WHERE id = @Id
-                """;
-
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                room.Name,
-                room.Capacity,
-                room.PricePerHour,
-                Id = id
-            });
-
-            if (rows == 0)
+            var existing = await _db.Rooms.FindAsync(id);
+            if (existing == null)
             {
                 _logger.LogWarning("Комната с id {Id} не найдена для обновления", id);
                 return false;
             }
+
+            existing.Name = room.Name;
+            existing.Capacity = room.Capacity;
+            existing.PricePerHour = room.PricePerHour;
+
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Обновлена комната с id {Id}", id);
             return true;
@@ -121,15 +109,15 @@ public class RoomService(DataContext _context, ILogger<RoomService> _logger) : I
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "DELETE FROM rooms WHERE id = @Id";
-            var rows = await connection.ExecuteAsync(sql, new { Id = id });
-
-            if (rows == 0)
+            var room = await _db.Rooms.FindAsync(id);
+            if (room == null)
             {
                 _logger.LogWarning("Комната с id {Id} не найдена для удаления", id);
                 return false;
             }
+
+            _db.Rooms.Remove(room);
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Удалена комната с id {Id}", id);
             return true;

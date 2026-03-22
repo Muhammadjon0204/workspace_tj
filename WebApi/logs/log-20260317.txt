@@ -139,3 +139,13 @@
 2026-03-17 11:50:36.882 +03:00 [INF] Executed action WebApi.Controllers.BookingController.GetCompanyBookings (WebApi) in 429.1028ms
 2026-03-17 11:50:36.888 +03:00 [INF] Executed endpoint 'WebApi.Controllers.BookingController.GetCompanyBookings (WebApi)'
 2026-03-17 11:50:36.892 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/api/bookings/company/1 - 200 null application/json; charset=utf-8 498.8628ms
+2026-03-17 15:12:39.252 +03:00 [INF] Now listening on: http://localhost:5264
+2026-03-17 15:12:39.315 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-17 15:12:39.318 +03:00 [INF] Hosting environment: Development
+2026-03-17 15:12:39.319 +03:00 [INF] Content root path: C:\Users\user\Desktop\C_SHARP\workspace.tj\WebApi
+2026-03-17 15:12:42.984 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/ - null null
+2026-03-17 15:12:43.098 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-03-17 15:12:43.107 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/ - 404 0 null 131.912ms
+2026-03-17 15:12:43.165 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5264/, Response status code: 404
+2026-03-17 15:12:47.307 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - null null
+2026-03-17 15:12:47.607 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5264/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 300.5145ms

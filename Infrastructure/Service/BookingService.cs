@@ -1,21 +1,23 @@
-using Dapper;
 using Domain.DTOs;
 using Domain.Entities;
 using Infrastructure.Context;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Service;
 
-public class BookingService(DataContext _context, ILogger<BookingService> _logger) : IBookingService
+public class BookingService(DBContext _db, ILogger<BookingService> _logger) : IBookingService
 {
     public async Task<IEnumerable<Booking>> GetCompanyBookingsAsync(int companyId)
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT Id , company_id as CompanyId , workspace_id as WorkspaceId , booking_date as BookingDate , start_time as StartTime , end_time as EndTime , total_price as TotalPrice , status , created_at as CreatedAt FROM bookings WHERE company_id = @CompanyId ORDER BY booking_date";
-            return await connection.QueryAsync<Booking>(sql, new { CompanyId = companyId });
+            return await _db.Bookings
+                .AsNoTracking()
+                .Where(b => b.CompanyId == companyId)
+                .OrderBy(b => b.BookingDate)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -34,45 +36,36 @@ public class BookingService(DataContext _context, ILogger<BookingService> _logge
             if (request.BookingDate < DateTime.Today)
                 throw new ArgumentException("Дата бронирования не может быть в прошлом");
 
-            using var connection = _context.CreateConnection();
-
-            var priceSql = """
-                SELECT r.price_per_hour
-                FROM workspaces w
-                JOIN rooms r ON r.id = w.room_id
-                WHERE w.id = @WorkspaceId
-                """;
-
-            var pricePerHour = await connection.ExecuteScalarAsync<decimal>(priceSql, new
-            {
-                request.WorkspaceId
-            });
+            // Получаем цену через Include — EF делает JOIN сам
+            var pricePerHour = await _db.Workspaces
+                .AsNoTracking()
+                .Where(w => w.Id == request.WorkspaceId)
+                .Select(w => w.Room!.PricePerHour)
+                .FirstOrDefaultAsync();
 
             var hours = (decimal)(request.EndTime - request.StartTime).TotalHours;
             var totalPrice = pricePerHour * hours;
 
-            var sql = """
-                INSERT INTO bookings (company_id, workspace_id, booking_date, start_time, end_time, total_price, status, created_at)
-                VALUES (@CompanyId, @WorkspaceId, @BookingDate, @StartTime, @EndTime, @TotalPrice, 'pending', @CreatedAt)
-                RETURNING id
-                """;
-
-            var id = await connection.ExecuteScalarAsync<int>(sql, new
+            var booking = new Booking
             {
-                request.CompanyId,
-                request.WorkspaceId,
-                request.BookingDate,
-                request.StartTime,
-                request.EndTime,
+                CompanyId = request.CompanyId,
+                WorkspaceId = request.WorkspaceId,
+                BookingDate = request.BookingDate,
+                StartTime = request.StartTime,
+                EndTime = request.EndTime,
                 TotalPrice = totalPrice,
+                Status = "pending",
                 CreatedAt = DateTime.UtcNow
-            });
+            };
+
+            await _db.Bookings.AddAsync(booking);
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation(
                 "Создано бронирование id {Id}: компания {CompanyId}, workspace {WorkspaceId}, дата {Date}",
-                id, request.CompanyId, request.WorkspaceId, request.BookingDate);
+                booking.Id, request.CompanyId, request.WorkspaceId, request.BookingDate);
 
-            return id;
+            return booking.Id;
         }
         catch (Exception ex)
         {
@@ -89,15 +82,15 @@ public class BookingService(DataContext _context, ILogger<BookingService> _logge
             if (!allowedStatuses.Contains(status.ToLower()))
                 throw new ArgumentException($"Недопустимый статус. Допустимые: {string.Join(", ", allowedStatuses)}");
 
-            using var connection = _context.CreateConnection();
-            var sql = "UPDATE bookings SET status = @Status WHERE id = @Id";
-            var rows = await connection.ExecuteAsync(sql, new { Status = status, Id = id });
-
-            if (rows == 0)
+            var booking = await _db.Bookings.FindAsync(id);
+            if (booking == null)
             {
                 _logger.LogWarning("Бронирование с id {Id} не найдено для обновления статуса", id);
                 return false;
             }
+
+            booking.Status = status;
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Статус бронирования id {Id} изменён на {Status}", id, status);
             return true;
@@ -113,9 +106,11 @@ public class BookingService(DataContext _context, ILogger<BookingService> _logge
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM bookings WHERE booking_date = @Date ORDER BY start_time";
-            return await connection.QueryAsync<Booking>(sql, new { Date = date.Date });
+            return await _db.Bookings
+                .AsNoTracking()
+                .Where(b => b.BookingDate.Date == date.Date)
+                .OrderBy(b => b.StartTime)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -128,16 +123,19 @@ public class BookingService(DataContext _context, ILogger<BookingService> _logge
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = """
-                SELECT 
-                    COUNT(*) AS TotalBookings,
-                    COALESCE(SUM(total_price), 0) AS TotalAmount,
-                    COUNT(DISTINCT company_id) AS TotalCompanies
-                FROM bookings
-                """;
+            var stats = await _db.Bookings
+                .AsNoTracking()
+                .GroupBy(_ => 1)
+                .Select(g => new BookingStatistics
+                {
+                    TotalBookings = g.Count(),
+                    TotalAmount = g.Sum(b => b.TotalPrice),
+                    TotalCompanies = g.Select(b => b.CompanyId).Distinct().Count()
+                })
+                .FirstOrDefaultAsync();
 
-            var stats = await connection.QueryFirstAsync<BookingStatistics>(sql);
+            // Если бронирований нет вообще — GroupBy вернёт null
+            stats ??= new BookingStatistics();
 
             _logger.LogInformation("Получена статистика бронирований");
             return stats;

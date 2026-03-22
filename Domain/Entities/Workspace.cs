@@ -11,4 +11,7 @@ public class Workspace
     public string Type { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.MinValue;
 
+    public Room? Room { get; set; }
+    public ICollection<Booking> Bookings { get; set; } = [];
+
 }

@@ -1,20 +1,21 @@
-using Dapper;
 using Domain.Entities;
 using Infrastructure.Context;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Service;
 
-public class CompanyService(DataContext _context, ILogger<CompanyService> _logger) : ICompanyService
+public class CompanyService(DBContext _db, ILogger<CompanyService> _logger) : ICompanyService
 {
     public async Task<IEnumerable<Company>> GetAllAsync()
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM companies ORDER BY id";
-            return await connection.QueryAsync<Company>(sql);
+            return await _db.Companies
+                .AsNoTracking()
+                .OrderBy(c => c.Id)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -27,9 +28,9 @@ public class CompanyService(DataContext _context, ILogger<CompanyService> _logge
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM companies WHERE id = @Id";
-            var company = await connection.QueryFirstOrDefaultAsync<Company>(sql, new { Id = id });
+            var company = await _db.Companies
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (company == null)
                 _logger.LogWarning("Компания с id {Id} не найдена", id);
@@ -53,18 +54,13 @@ public class CompanyService(DataContext _context, ILogger<CompanyService> _logge
             if (string.IsNullOrWhiteSpace(company.Email))
                 throw new ArgumentException("Email компании обязателен");
 
-            using var connection = _context.CreateConnection();
-            var sql = """
-                INSERT INTO companies (name, phone, email, created_at)
-                VALUES (@Name, @Phone, @Email, @CreatedAt)
-                RETURNING id
-                """;
-
             company.CreatedAt = DateTime.UtcNow;
-            var id = await connection.ExecuteScalarAsync<int>(sql, company);
 
-            _logger.LogInformation("Создана компания: {Name}, id {Id}", company.Name, id);
-            return id;
+            await _db.Companies.AddAsync(company);
+            await _db.SaveChangesAsync();
+
+            _logger.LogInformation("Создана компания: {Name}, id {Id}", company.Name, company.Id);
+            return company.Id;
         }
         catch (Exception ex)
         {
@@ -80,26 +76,18 @@ public class CompanyService(DataContext _context, ILogger<CompanyService> _logge
             if (string.IsNullOrWhiteSpace(company.Name))
                 throw new ArgumentException("Название компании обязательно");
 
-            using var connection = _context.CreateConnection();
-            var sql = """
-                UPDATE companies
-                SET name = @Name, phone = @Phone, email = @Email
-                WHERE id = @Id
-                """;
-
-            var rows = await connection.ExecuteAsync(sql, new
+            var existing = await _db.Companies.FindAsync(id);
+            if (existing == null)
             {
-                company.Name,
-                company.Phone,
-                company.Email,
-                Id = id
-            });
-
-            if (rows == 0)
-            {
-                _logger.LogWarning("Компания с id {Id} не найдена для обновления", id);
+                _logger.LogWarning("Компания с id {Id} не найдена", id);
                 return false;
             }
+
+            existing.Name = company.Name;
+            existing.Phone = company.Phone;
+            existing.Email = company.Email;
+
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Обновлена компания с id {Id}", id);
             return true;
@@ -115,15 +103,15 @@ public class CompanyService(DataContext _context, ILogger<CompanyService> _logge
     {
         try
         {
-            using var connection = _context.CreateConnection();
-            var sql = "DELETE FROM companies WHERE id = @Id";
-            var rows = await connection.ExecuteAsync(sql, new { Id = id });
-
-            if (rows == 0)
+            var company = await _db.Companies.FindAsync(id);
+            if (company == null)
             {
                 _logger.LogWarning("Компания с id {Id} не найдена для удаления", id);
                 return false;
             }
+
+            _db.Companies.Remove(company);
+            await _db.SaveChangesAsync();
 
             _logger.LogInformation("Удалена компания с id {Id}", id);
             return true;

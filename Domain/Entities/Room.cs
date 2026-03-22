@@ -11,4 +11,6 @@ public class Room
     public decimal PricePerHour { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.MinValue;
 
+     public ICollection<Workspace> Workspaces { get; set; } = [];
+
 }

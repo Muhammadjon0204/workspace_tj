@@ -13,3 +13,6 @@ C:\Users\user\Desktop\C_SHARP\workspace.tj\Infrastructure\obj\Debug\net9.0\Infra
 C:\Users\user\Desktop\C_SHARP\workspace.tj\Infrastructure\obj\Debug\net9.0\refint\Infrastructure.dll
 C:\Users\user\Desktop\C_SHARP\workspace.tj\Infrastructure\obj\Debug\net9.0\Infrastructure.pdb
 C:\Users\user\Desktop\C_SHARP\workspace.tj\Infrastructure\obj\Debug\net9.0\ref\Infrastructure.dll
+C:\Users\user\Desktop\C_SHARP\workspace.tj\Infrastructure\obj\Debug\net9.0\Infrastructure.sourcelink.json
+C:\Users\user\Desktop\C_SHARP\workspace.tj\Infrastructure\bin\Debug\net9.0\Infrastructure.runtimeconfig.json
+C:\Users\user\Desktop\C_SHARP\workspace.tj\Infrastructure\obj\Debug\net9.0\Infrastructure.genruntimeconfig.cache
